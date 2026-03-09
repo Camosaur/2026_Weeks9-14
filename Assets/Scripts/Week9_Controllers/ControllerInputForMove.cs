@@ -22,9 +22,9 @@ public class ControllerInputForMove : MonoBehaviour
         //transform.position = position;
     }
 
-    public void OnPoint(InputAction.CallbackContext context) { 
-        movement = Camera.main.ScreenToWorldPoint(context.ReadValue<Vector2>());
-    }
+    //public void OnPoint(InputAction.CallbackContext context) { 
+    //    movement = Camera.main.ScreenToWorldPoint(context.ReadValue<Vector2>());
+    //}
     public void OnMove(InputAction.CallbackContext context) {
         position = context.ReadValue<Vector2>();
     }
