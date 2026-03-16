@@ -24,14 +24,19 @@ public class GrowManager : MonoBehaviour
     }
 
     public void startRockGrowing() {
-        if (!isRunning) {
+
             StartCoroutine(growRock());
-        }
+
         
     }
 
     IEnumerator growRock()
     {
+        //if there is another instance of this corutine running, exit the corutine without yeilding
+        if (isRunning)
+        {
+            yield break; //Thank you tooltips, I would not have known about this line
+        }
         rockTransform.localScale = Vector2.zero;
         sigilTransform.localScale = Vector2.zero;
         float t = 0;
