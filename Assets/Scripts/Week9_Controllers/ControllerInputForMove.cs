@@ -18,7 +18,7 @@ public class ControllerInputForMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position += (Vector3)movement * speed * Time.deltaTime;
+        transform.position += (Vector3)position * speed * Time.deltaTime;
         //transform.position = position;
     }
 
