@@ -18,11 +18,20 @@ public class PlayerControls : MonoBehaviour
     Coroutine movementCooldownCorutine = null;
     Coroutine accelerationCoroutine = null;
 
+    //Changing Sprites
+    SpriteRenderer costume;
+    public Sprite normal;
+    public Sprite stunned;
+
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        costume = GetComponent<SpriteRenderer>();
+
+        //Test
+        //OnTouchingBomb(10);
     }
 
     // Update is called once per frame
@@ -36,6 +45,20 @@ public class PlayerControls : MonoBehaviour
 
             //Use the temp variable and the current position to change the sprite's rotation
             transform.up = tempPos - (Vector2)transform.position;
+
+            //If your are still whithin the bounds of the screen, Set the new position
+
+            //X axis...
+            if (!(Camera.main.WorldToScreenPoint(tempPos).x > 0 && Camera.main.WorldToScreenPoint(tempPos).x < Screen.width))
+            {
+                tempPos.x = transform.position.x;
+            }
+
+            //Y axis!
+            if (!(Camera.main.WorldToScreenPoint(tempPos).y > 0 && Camera.main.WorldToScreenPoint(tempPos).y < Screen.height))
+            {
+                tempPos.y = transform.position.y;
+            }
 
             //Set the new position
             transform.position = tempPos;
@@ -76,15 +99,21 @@ public class PlayerControls : MonoBehaviour
     //Make the player unable to move for a certain amount of seconds
     IEnumerator movementCooldown(float cooldown) { 
         
-        //Set isMoving to false, wait for a certain time, then set it back.
+        //Set isMoving to false and change the costume -> wait for a certain time -> then set them back.
+
+
         isMoving = false;
+        costume.sprite = stunned;
+
         yield return new WaitForSeconds(cooldown);
+
         isMoving = true;
+        costume.sprite = normal;
     }
 
     //Make the player "accelerate" by changing it's speed along an animationCurve
     IEnumerator acceleration() {
-        Debug.Log("Started acc");
+
         float t = 0;
 
         while (true) { 
