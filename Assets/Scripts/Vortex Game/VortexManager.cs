@@ -2,17 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class VortexManager : MonoBehaviour
 {
     //FOR VORTEX STRENGTH
     public float DefaultVortexStrength = 0.5f; //How strong the vortex is by default. Affected objects will be pulled this much every second.
     float VortexStrengthAddon = 0; //Adding onto the vortex strength, so that it can change during the game
-    float VortexStrength; //The actual vortex strength, calculated in update for ease of use.
+    public float VortexStrength; //The actual vortex strength, calculated in update for ease of use.
 
     //REFRENCES
     public Transform mouthTransform;
     public GameObject player;
+
+    public GameObject defaultCandy;
+    public GameObject defaultBomb;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -23,13 +27,21 @@ public class VortexManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Update the vortex strength
         VortexStrength = DefaultVortexStrength + VortexStrengthAddon;
+
+        //if (Mouse.current.leftButton.wasPressedThisFrame)
+        //{
+
+        //    spawnDebris(6);
+
+        //}
     }
 
-    public void ChangeStrength(int ChangeByThisMuch) {
+    public void ChangeStrength(float ChangeByThisMuch) {
         
-        //If the vortex will be greater than 0, change it by that much.
-        if (VortexStrength + ChangeByThisMuch > 0) { 
+        //Change it, but don't go below the default value.
+        if (VortexStrengthAddon + ChangeByThisMuch > 0) { 
             VortexStrengthAddon += ChangeByThisMuch;
         }
     }
@@ -79,4 +91,55 @@ public class VortexManager : MonoBehaviour
         return pulledObject.GetComponent<Debris>().isEaten;
 
     }
+
+    public void spawnDebris(int amount) {
+        
+        //Randomize the spawn between bomb and candy. 1 in 5 chance for candy
+        GameObject newDebris;
+
+        if (Random.Range(0, 5) < 1)
+        {
+            newDebris = defaultCandy;
+        }
+        else {
+            newDebris = defaultBomb;
+        }
+
+        //Determine weather you are spawning on the sides or top/bottem
+        float startXPos;
+        float startYPos;
+
+        if (Random.Range(0, 2) < 1)
+        {
+            //We're spawning on the sides
+            startXPos = -10;
+            if (Random.Range(0, 2) < 1)
+            {
+                startXPos *= -1;
+            }
+
+            startYPos = Random.Range(-6, 6);
+        }
+        else {
+            //We're spawning on the top/bottem
+            startYPos = -6;
+            if (Random.Range(0, 2) < 1)
+            {
+                startYPos *= -1;
+            }
+            startXPos = Random.Range(-10, 10);
+        }
+
+
+        //Instantiate that object, and a corutine to handle it's movement and deletion
+        StartCoroutine(pullToPoint(mouthTransform, Instantiate(newDebris, new Vector3(startXPos, startYPos, 0), Quaternion.identity)));
+
+        //Recurse until the amount is satisfied
+        if (amount > 1) {
+            spawnDebris(amount - 1);
+        }
+        
+    }
+
+    //IEnumerator 
 }
