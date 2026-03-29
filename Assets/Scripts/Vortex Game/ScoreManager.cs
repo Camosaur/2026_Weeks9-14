@@ -10,8 +10,12 @@ public class ScoreManager : MonoBehaviour
     public bool isPlaying = false; //Is the game going, or are we in a "Game Over" state?
 
     public GameObject pressPlayUI; //The UI element that will only appear if we are in a Game Over state
+    public GameObject banner; //Same
 
     public TextMeshProUGUI scoreText; //The UI text which will display score
+
+    //Refrence to the player, cuz I was having trouble
+    public Transform player;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -41,16 +45,22 @@ public class ScoreManager : MonoBehaviour
 
         //Hide the play button
         pressPlayUI.SetActive(false);
+        banner.SetActive(false);
 
         //Start the scoreCounter
         StartCoroutine(scoreCounter());
 
     }
 
-    public void gameOver() { 
-    
+    public void gameOver() {
+
+        //Put the player at it's starting position
+        player.position = new Vector3(0, 4, 0);
+
+
         isPlaying = false;
         pressPlayUI.SetActive(true);
+        banner.SetActive(true);
     }
 
     IEnumerator scoreCounter() {

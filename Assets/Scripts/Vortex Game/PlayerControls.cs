@@ -29,6 +29,9 @@ public class PlayerControls : MonoBehaviour
     public Transform mouth;
     public UnityEvent OnTouchingMouth;
 
+    //Scoretracker referebce
+    public ScoreManager scoreManager;
+
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -48,7 +51,7 @@ public class PlayerControls : MonoBehaviour
             OnTouchingMouth.Invoke();
         }
 
-        if (isMoving) {
+        if (isMoving && scoreManager.isPlaying) {
             //---MOVING THE SPRITE IN SCENE---
 
             //Save the new position temporaraly

@@ -52,11 +52,17 @@ public class VortexManager : MonoBehaviour
 
     public void StartGame() {
 
+        //DO NOT START REPEAT GAMES
+        if (GetComponent<ScoreManager>().isPlaying)
+        {
+            return;
+        }
+
         //Reset the vortex
         VortexStrengthAddon = 0;
 
-        //Put the player at 0,0- it's starting position
-        player.transform.position = Vector3.zero;
+        //Put the player at it's starting position
+        player.transform.position = new Vector3(0, 4, 0);
     }
 
     IEnumerator pullToPoint(Transform mouthTransform, GameObject pulledObject) {
@@ -64,14 +70,18 @@ public class VortexManager : MonoBehaviour
         //While the object isn't marked as eaten
         while (!IsThisEaten(pulledObject))
         {
-            //Find the direction to the spot
-            Vector2 direction = mouthTransform.position - pulledObject.transform.position;
+            if (GetComponent<ScoreManager>().isPlaying) {
 
-            //So that it goes the intended speed
-            direction = Vector2.Normalize(direction);
+                //Find the direction to the spot
+                Vector2 direction = mouthTransform.position - pulledObject.transform.position;
 
-            //Move toward that spot at a rate of VortexStength per second
-            pulledObject.transform.position += (Vector3)direction * Time.deltaTime * VortexStrength;
+                //So that it goes the intended speed
+                direction = Vector2.Normalize(direction);
+
+                //Move toward that spot at a rate of VortexStength per second
+                pulledObject.transform.position += (Vector3)direction * Time.deltaTime * VortexStrength;
+
+            }
 
             //Wait for the next frame
             yield return null;
@@ -90,18 +100,25 @@ public class VortexManager : MonoBehaviour
         if (pulledObject.GetComponent<Debris>() == null) {
             return false;
         }
-        
+
         //It is not the player. Return weather this debris is eaten
+
+        //Also return true if the game is over
+        if (!GetComponent<ScoreManager>().isPlaying)
+        {
+            return true;
+        }
+
         return pulledObject.GetComponent<Debris>().isEaten;
 
     }
 
     public void spawnDebris(int amount) {
         
-        //Randomize the spawn between bomb and candy. 1 in 3 chance for candy
+        //Randomize the spawn between bomb and candy. 1 in x chance for candy
         GameObject newDebris;
 
-        if (Random.Range(0, 3) < 1)
+        if (Random.Range(0, 2) < 1)
         {
             newDebris = defaultCandy;
         }
@@ -153,7 +170,7 @@ public class VortexManager : MonoBehaviour
 
             yield return new WaitForSeconds(Random.Range(1, 3));
             if (scoreTracker.isPlaying) {
-                spawnDebris(1);
+                spawnDebris(1 + (int)scoreTracker.score/10);
             }
         
         }
