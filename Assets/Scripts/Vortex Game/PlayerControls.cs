@@ -1,5 +1,7 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
@@ -23,6 +25,10 @@ public class PlayerControls : MonoBehaviour
     public Sprite normal;
     public Sprite stunned;
 
+    //Refrence to the mouth
+    public Transform mouth;
+    public UnityEvent OnTouchingMouth;
+
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -30,13 +36,18 @@ public class PlayerControls : MonoBehaviour
     {
         costume = GetComponent<SpriteRenderer>();
 
-        //Test
-        //OnTouchingBomb(10);
+        
     }
 
     // Update is called once per frame
     void Update()
     {
+        //---CHECKING FOR GAMER OVER---
+        if (Vector2.Distance(transform.position, mouth.position) < 0.5f)
+        {
+            OnTouchingMouth.Invoke();
+        }
+
         if (isMoving) {
             //---MOVING THE SPRITE IN SCENE---
 

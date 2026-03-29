@@ -21,7 +21,11 @@ public class VortexManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        //Pull the player
         StartCoroutine(pullToPoint(mouthTransform, player));
+
+        //Spawn debris
+        StartCoroutine(spawnEnemies());
     }
 
     // Update is called once per frame
@@ -94,10 +98,10 @@ public class VortexManager : MonoBehaviour
 
     public void spawnDebris(int amount) {
         
-        //Randomize the spawn between bomb and candy. 1 in 5 chance for candy
+        //Randomize the spawn between bomb and candy. 1 in 3 chance for candy
         GameObject newDebris;
 
-        if (Random.Range(0, 5) < 1)
+        if (Random.Range(0, 3) < 1)
         {
             newDebris = defaultCandy;
         }
@@ -141,5 +145,18 @@ public class VortexManager : MonoBehaviour
         
     }
 
-    //IEnumerator 
+    IEnumerator spawnEnemies() {
+
+        ScoreManager scoreTracker = GetComponent<ScoreManager>();
+
+        while (true) {
+
+            yield return new WaitForSeconds(Random.Range(1, 3));
+            if (scoreTracker.isPlaying) {
+                spawnDebris(1);
+            }
+        
+        }
+    
+    }
 }
