@@ -20,7 +20,7 @@ public class Debris : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //If it is touching the mouth or player, marks itself as eaton and raises the appropiate event
+        //If it is touching the mouth or player, marks itself as eaten and raises the appropiate event
 
         //Mouth
         if (Vector2.Distance(transform.position, mouth.position) < 0.5f) {
