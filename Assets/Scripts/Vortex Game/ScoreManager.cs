@@ -17,6 +17,8 @@ public class ScoreManager : MonoBehaviour
     //Refrence to the player, cuz I was having trouble
     public Transform player;
 
+    Coroutine scoreCount;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -48,7 +50,11 @@ public class ScoreManager : MonoBehaviour
         banner.SetActive(false);
 
         //Start the scoreCounter
-        StartCoroutine(scoreCounter());
+        if (scoreCount != null) { 
+            StopCoroutine(scoreCount);
+        }
+        
+        scoreCount = StartCoroutine(scoreCounter());
 
     }
 

@@ -168,9 +168,9 @@ public class VortexManager : MonoBehaviour
 
         while (true) {
 
-            yield return new WaitForSeconds(Random.Range(1, 3));
+            yield return new WaitForSeconds(Random.Range(0.5f, 6-Mathf.Clamp(scoreTracker.score / 10, 0, 5)));
             if (scoreTracker.isPlaying) {
-                spawnDebris(1 + (int)scoreTracker.score/10);
+                spawnDebris(Random.Range(1, 2));
             }
         
         }
