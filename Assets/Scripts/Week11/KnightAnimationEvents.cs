@@ -1,8 +1,10 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
-
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Tilemaps;
 
 public class KnightAnimationEvents : MonoBehaviour
 {
@@ -16,6 +18,10 @@ public class KnightAnimationEvents : MonoBehaviour
     public Animator animator;
 
     public List<AudioClip> stepSounds;
+
+    public SilentKnight grassChecker;
+
+    public GameObject stomp;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -35,6 +41,11 @@ public class KnightAnimationEvents : MonoBehaviour
 
     public void OnClick(InputAction.CallbackContext context) {
 
+        if (grassChecker.isThisOnGrass(mousePos))
+        {
+            return;
+        }
+
         if (vortexMovement != null) { 
             StopCoroutine(vortexMovement);
         }
@@ -45,9 +56,17 @@ public class KnightAnimationEvents : MonoBehaviour
 
     public void Footsteps() {
 
+        if (grassChecker.isThisOnGrass(transform.position)) {
+            return;
+        }
+
+        grassChecker.changeTile();
+        GameObject woosh = Instantiate(stomp, transform.position, Quaternion.identity);
+        Destroy(woosh, 1);
         SFX.pitch = Random.Range(1, 2);
         SFX.clip = stepSounds[Random.Range(0, stepSounds.Count)];
         SFX.Play();
+        GetComponent<CinemachineImpulseSource>().GenerateImpulseWithForce(1);
     }
 
     //Use this in the project.... You'll have to remove the animation stuff, but it's perfect!
