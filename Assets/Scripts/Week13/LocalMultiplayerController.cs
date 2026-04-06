@@ -1,0 +1,26 @@
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class LocalMultiplayerController : MonoBehaviour
+{
+    public Vector2 moveInput;
+    public float speed = 5;
+
+    // Update is called once per frame
+    void Update()
+    {
+        transform.position += (Vector3)moveInput * speed * Time.deltaTime;
+    }
+
+    public void OnMove(InputAction.CallbackContext context) { 
+    
+        moveInput = context.ReadValue<Vector2>();
+
+    }
+
+    public void OnAttack(InputAction.CallbackContext context) {
+
+        if (context.performed) { Debug.Log("Attack!"); }
+
+    }
+}
