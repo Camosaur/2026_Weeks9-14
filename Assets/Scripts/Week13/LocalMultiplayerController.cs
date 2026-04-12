@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class LocalMultiplayerController : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class LocalMultiplayerController : MonoBehaviour
     public int health = 5;
     public bool isDashing = false;
     public bool isDead = false;
+    public Slider healthbar;
 
     private void Start()
     {
@@ -41,7 +43,10 @@ public class LocalMultiplayerController : MonoBehaviour
         {
             GetComponent<SpriteRenderer>().color = Color.white;
             transform.position += (Vector3)moveInput * speed * Time.deltaTime;
-        }            
+        }   
+        
+        healthbar.value = health;
+
     }
 
     public void OnMove(InputAction.CallbackContext context) { 

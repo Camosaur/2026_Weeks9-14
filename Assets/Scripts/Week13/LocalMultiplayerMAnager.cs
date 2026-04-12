@@ -70,4 +70,14 @@ public class LocalMultiplayerMAnager : MonoBehaviour
         controller.manager = this;
 
     }
+
+    public void OnHealButtonPress() {
+        foreach (var player in players)
+        { 
+            
+            player.GetComponent<LocalMultiplayerController>().health = 5;
+
+
+        }
+    }
 }
